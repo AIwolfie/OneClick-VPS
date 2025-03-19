@@ -19,17 +19,11 @@ echo "[+] Updating system..."
 sudo apt update && sudo apt upgrade -y
 
 echo "[+] Installing dependencies..."
-sudo apt install -y curl wget git unzip jq tmux build-essential nano
-
-echo "[+] Installing Python..."
-sudo apt install -y python3 python3-pip python3-venv python3-dev
+sudo apt install -y curl wget git unzip jq tmux build-essential nano python3 python3-pip python3-venv python3-dev ruby-full
 
 echo "[+] Installing pipx..."
 sudo apt install -y pipx
 pipx ensurepath
-
-echo "[+] Installing Ruby..."
-sudo apt install -y ruby-full
 
 echo "[+] Installing Go..."
 cd $HOME/deps
@@ -45,7 +39,6 @@ echo 'export PATH=$PATH:$GOPATH/bin' >> $SHELL_CONFIG
 source $SHELL_CONFIG
 
 echo "[+] Installing common security tools..."
-cd $HOME/tools
 sudo apt install -y nmap gobuster subfinder 
 
 echo "[+] Installing Go-based tools..."
@@ -60,18 +53,20 @@ go install -v github.com/projectdiscovery/mapcidr/cmd/mapcidr@latest
 go install -v github.com/lc/gau/v2/cmd/gau@latest
 go install -v github.com/tomnomnom/waybackurls@latest
 
+echo "[+] Cloning additional tools into tools/..."
+cd $HOME/tools
+git clone https://github.com/mchklt/auth-bypass.git
+git clone https://github.com/Dheerajmadhukar/4-ZERO-3.git
+git clone https://github.com/s0md3v/XSStrike.git
+git clone https://github.com/ROBOT-X-cyber/xss_vibes.git
+
 echo "[+] Setting up gf patterns..."
 mkdir -p $HOME/.gf
 cp -r $GOPATH/pkg/mod/github.com/tomnomnom/gf@*/examples/* $HOME/.gf/
 
-echo "[+] Downloading SecLists into wordlists..."
+echo "[+] Downloading SecLists into wordlists/..."
 cd $HOME/wordlists
 git clone https://github.com/danielmiessler/SecLists.git
-
-echo "[+] Installing additional tools..."
-cd $HOME/tools
-git clone https://github.com/mchklt/auth-bypass.git
-git clone https://github.com/Dheerajmadhukar/4-ZERO-3.git
 
 echo "[+] Downloading Nuclei Templates..."
 cd $HOME/nuclei-templates
@@ -80,10 +75,6 @@ git clone https://github.com/projectdiscovery/nuclei-templates.git
 echo "[+] Downloading Private Nuclei Templates (CoffinXP)..."
 cd $HOME/priv8-templates
 git clone https://github.com/coffinxp/nuclei-templates.git
-
-echo "[+] Cloning XSStrike..."
-cd $HOME/tools
-git clone https://github.com/s0md3v/XSStrike.git
 
 echo "[+] Installing bbot (stable)..."
 pipx install bbot
@@ -119,4 +110,3 @@ echo "[+] Tools are in ~/tools, dependencies in ~/deps, SecLists in ~/wordlists.
 echo "[+] Nuclei templates are in ~/nuclei-templates, and private templates in ~/priv8-templates."
 echo "[+] All installed tools should be available globally in your shell."
 echo "[+] Happy hacking!"
-```
